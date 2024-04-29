@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: student
+      POSTGRES_PASSWORD: student
+      POSTGRES_DB: moviedb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql_scripts:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata:
