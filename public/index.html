@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Film App</title>
+</head>
+<body>
+<h1>Film App</h1>
+
+<button id="fetchGraphQL" name="fetchGraphQL" onclick="fetchGraphQL()">Haal Alle Films Op (GraphQL)</button>
+<button id="fetchREST" name="fetchREST" onclick="fetchREST()">Haal Alle Films Op (REST)</button>
+<input type="text" id="movieTitle" placeholder="Film Titel">
+<button id="fetchRESTMovieWithParams" onclick="fetchRESTMovieWithParams(11)">REST op StarWars met cast, genres, company</button>
+<button id="fetchGraphQLMovieWithParams" onclick="fetchGraphQLMovieWithParams(11)">GraphQL op StarWars met cast, genres, company</button>
+<div id="results"></div>
+<script src="./dist/bundle.js"></script>
+</body>
+</html>

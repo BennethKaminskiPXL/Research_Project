@@ -13,6 +13,12 @@ const pool = new Pool({
   port: 5432,
 });
 
+//index.html in server
+app.use(express.static('public'));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 // rest alle movies ophalen
 app.get('/movies', async (req, res) => {
