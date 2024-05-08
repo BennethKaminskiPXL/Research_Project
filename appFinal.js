@@ -82,79 +82,9 @@ app.get('/movie/:id', async (req, res) => {
     client.release();
   }
 }); */
-app.get('/movie/:id/genre', async (req, res) => {
-  const client = await pool.connect();
-  try {
-    const movieResult = await client.query('SELECT * FROM movies.movie WHERE movie_id = $1', [req.params.id]);
-    const movie = movieResult.rows[0];
 
-    if (movie) {
-      const castResult = await client.query('SELECT character_name FROM movies.movie_cast WHERE movie_id = $1', [req.params.id]);
-      movie.cast = castResult.rows;
-
-      const movieGenresResult = await client.query('SELECT genre_id FROM movies.movie_genres WHERE movie_id = $1', [req.params.id]);
-      movie.movieGenres = await Promise.all(movieGenresResult.rows.map(async (movieGenre) => {
-        const genreResult = await client.query('SELECT genre_name FROM movies.genre WHERE genre_id = $1', [movieGenre.genre_id]);
-        movieGenre.genre = genreResult.rows[0];
-        return movieGenre;
-      }));
-
-      const movieCompaniesResult = await client.query('SELECT company_id FROM movies.movie_company WHERE movie_id = $1', [req.params.id]);
-      movie.movieCompanies = await Promise.all(movieCompaniesResult.rows.map(async (movieCompany) => {
-        const companyResult = await client.query('SELECT company_name FROM movies.production_company WHERE company_id = $1', [movieCompany.company_id]);
-        movieCompany.company = companyResult.rows[0];
-        return movieCompany;
-      }));
-    }
-
-    res.send(movie);
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  } finally {
-    client.release();
-  }
-});
-
-// promise om niet sequentieel te werken
-app.get('/movie/:id/genrepromise', async (req, res) => {
-  const client = await pool.connect();
-  try {
-    const movieResult = await client.query('SELECT * FROM movies.movie WHERE movie_id = $1', [req.params.id]);
-    const movie = movieResult.rows[0];
-
-    if (movie) {
-      const [castResult, movieGenresResult, movieCompaniesResult] = await Promise.all([
-        client.query('SELECT character_name FROM movies.movie_cast WHERE movie_id = $1', [req.params.id]),
-        client.query('SELECT genre_id FROM movies.movie_genres WHERE movie_id = $1', [req.params.id]),
-        client.query('SELECT company_id FROM movies.movie_company WHERE movie_id = $1', [req.params.id])
-      ]);
-
-      movie.cast = castResult.rows;
-
-      movie.movieGenres = await Promise.all(movieGenresResult.rows.map(async (movieGenre) => {
-        const genreResult = await client.query('SELECT genre_name FROM movies.genre WHERE genre_id = $1', [movieGenre.genre_id]);
-        movieGenre.genre = genreResult.rows[0];
-        return movieGenre;
-      }));
-
-      movie.movieCompanies = await Promise.all(movieCompaniesResult.rows.map(async (movieCompany) => {
-        const companyResult = await client.query('SELECT company_name FROM movies.production_company WHERE company_id = $1', [movieCompany.company_id]);
-        movieCompany.company = companyResult.rows[0];
-        return movieCompany;
-      }));
-    }
-
-    res.send(movie);
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  } finally {
-    client.release();
-  }
-});
 // geoptimaliseerde REST : alles wordt tegelijk opgehaald met promises
-app.get('/movie/:id/genreBatching', async (req, res) => {
+app.get('/movie/:id/genres', async (req, res) => {
   const client = await pool.connect();
   try {
     const movieResult = await client.query('SELECT * FROM movies.movie WHERE movie_id = $1', [req.params.id]);

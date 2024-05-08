@@ -7,13 +7,13 @@ export const options = {
       executor: 'constant-vus',
       vus: 1,
       duration: '1m',
-      exec: 'fetchRestNested10',
+      exec: 'fetchRest',
       options: {
         browser: {
           type: 'chromium',
         },
       },
-      tags: { name: 'fetchRestNested10' },
+      tags: { name: 'fetchRest' },
     },
   },
   thresholds: {
@@ -21,7 +21,7 @@ export const options = {
   },
 };
 
-export async function fetchRestNested10() {
+export async function fetchRest() {
   const page = browser.newPage();
 
   try {

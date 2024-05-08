@@ -11,7 +11,7 @@ const MAX_MOVIE_ID = 100;
 
 export default function () {
   const movieId = counter.toString();
-  const url = `http://localhost:4000/movie/${movieId}/genreBatching`;
+  const url = `http://localhost:4000/movie/${counter}/genres`;
 
   const response = http.get(url);
 

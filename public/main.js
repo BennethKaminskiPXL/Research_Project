@@ -48,7 +48,7 @@ window.fetchREST = async function fetchREST() {
 
 // film ophalen rest selected 
 window.fetchRESTMovieWithParams = async function fetchRESTMovieWithParams(id) {
-  const response = await fetch(`http://localhost:4000/movie/${id}/genreBatching`);
+  const response = await fetch(`http://localhost:4000/movie/${id}/genres`);
 if (response.status === 200) {
     
   const parsedResponse = await response.json();
