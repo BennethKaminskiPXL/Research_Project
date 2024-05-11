@@ -189,7 +189,6 @@ type Movie {
   cast: [MovieCast]
   movieGenres: [MovieGenre]
   movieCompanies: [MovieCompany]
-  # Add other fields as needed
 }
 
 
@@ -273,7 +272,12 @@ const resolvers = {
       try {
         const result = await client.query('SELECT * FROM movies.movie');
         return result.rows;
-      } finally {
+      } 
+      catch (err) {
+        console.error(err);
+        result.send('Error ' + err);
+      }
+      finally {
         client.release();
       }
     },
@@ -283,7 +287,12 @@ const resolvers = {
       try {
         const result = await client.query('SELECT * FROM movies.movie WHERE movie_id = $1', [movie_id]);
         return result.rows[0];
-      } finally {
+      } 
+      catch (err) {
+        console.error(err);
+        result.send('Error ' + err);
+      }
+      finally {
         client.release();
       }
     },

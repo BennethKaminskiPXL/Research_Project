@@ -45,3 +45,4 @@ export default function () {
 
   counter = (counter % MAX_MOVIE_ID) + 1;
 }
+
