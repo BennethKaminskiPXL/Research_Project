@@ -1,4 +1,4 @@
-## Pre-requirements
+## Requirements
 - Install K6
 - Install Docker Desktop
 
