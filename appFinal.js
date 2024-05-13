@@ -55,34 +55,6 @@ app.get('/movie/:id', async (req, res) => {
   }
 });
 
-// rest movie by id met castnaam, moviegenres en genrenaam
-/* app.get('/movie/:id/genre', async (req, res) => {
-  const client = await pool.connect();
-  try {
-    const movieResult = await client.query('SELECT * FROM movies.movie WHERE movie_id = $1', [req.params.id]);
-    const movie = movieResult.rows[0];
-
-    if (movie) {
-      const castResult = await client.query('SELECT character_name FROM movies.movie_cast WHERE movie_id = $1', [req.params.id]);
-      movie.cast = castResult.rows;
-
-      const movieGenresResult = await client.query('SELECT genre_id FROM movies.movie_genres WHERE movie_id = $1', [req.params.id]);
-      movie.movieGenres = await Promise.all(movieGenresResult.rows.map(async (movieGenre) => {
-        const genreResult = await client.query('SELECT genre_name FROM movies.genre WHERE genre_id = $1', [movieGenre.genre_id]);
-        movieGenre.genre = genreResult.rows[0];
-        return movieGenre;
-      }));
-    }
-
-    res.send(movie);
-  } catch (err) {
-    console.error(err);
-    res.send('Error ' + err);
-  } finally {
-    client.release();
-  }
-}); */
-
 // geoptimaliseerde REST : alles wordt tegelijk opgehaald met promises
 app.get('/movie/:id/genres', async (req, res) => {
   const client = await pool.connect();
@@ -201,7 +173,7 @@ type Query {
 
 const DataLoader = require('dataloader');
 
-// Maak een DataLoader voor elke entiteit
+// Dataloaders voor het optimaliseren van de queries
 const castLoader = new DataLoader(async (movieIds) => {
   const client = await pool.connect();
   try {
@@ -252,7 +224,7 @@ const companyDetailsLoader = new DataLoader(async (companyIds) => {
   }
 });
 
-// Pas je resolvers aan om de DataLoaders te gebruiken
+// Resolvers die dataloaders gebruiken
 const resolvers = {
   Movie: {
     cast: (parent) => castLoader.load(parent.movie_id),
